@@ -177,5 +177,5 @@ toxicity_test_cases = [
     "wth is this crap?",
 ]
 
-ILLEGEAL_INPUT_REPLIES = {"jailbreak": "Your request was blocked because it appears to be an attack. Please follow the guidelines and try again. \n If you believe this is a mistake, please contact a human support.",
+ILLEGAL_INPUT_REPLIES = {"jailbreak": "Your request was blocked because it appears to be an attack. Please follow the guidelines and try again. \n If you believe this is a mistake, please contact a human support.",
             "off-topic": "Sorry, I am a cutomer service chatbot and can only support questions related to our products and services. \n If you believe this is a mistake, please contact a human support."}

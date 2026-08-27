@@ -3,8 +3,8 @@ from guardrails.errors import ValidationError
 from guardrails_ai.detect_jailbreak import DetectJailbreak
 from guardrails_ai.restricttotopic import RestrictToTopic
 from guardrails_ai.detect_pii import DetectPII
-from dependencies import EXAMPLE_USER_QUERIES, pii_test_cases, ILLEGEAL_INPUT_REPLIES
-from chatbot import chatbot_reply
+from tide_guardrails.dependencies import EXAMPLE_USER_QUERIES, pii_test_cases, ILLEGAL_INPUT_REPLIES
+from tide_guardrails.chatbot import chatbot_reply
 
 PII_ENTITIES = ["EMAIL_ADDRESS", "PHONE_NUMBER",
                 "US_BANK_NUMBER", "US_SSN", "US_PASSPORT", "US_DRIVER_LICENSE"]
@@ -16,14 +16,14 @@ input_guard = Guard().use(
     DetectJailbreak(threshold=0.75, device="cpu", use_local=True, on_fail="noop"),
     RestrictToTopic(valid_topics=["customer service"], disable_llm=True,use_local=True,
                     disable_classifier=False, on_fail="noop",),
-    DetectPII(pii_entities=PII_ENTITIES, on_fail="fix"),
+    DetectPII(pii_entities=PII_ENTITIES, on_fail="fix", use_local=True),
 )
 
 # Diagnostic guards — one validator each, so results are attributable
 jailbreak_only = Guard().use(DetectJailbreak(threshold=0.75, device="cpu", use_local=True, on_fail="exception"))
 topic_only     = Guard().use(RestrictToTopic(valid_topics=["customer service"], disable_llm=True,
                                              disable_classifier=False, on_fail="exception"))
-pii_only       = Guard().use(DetectPII(pii_entities=PII_ENTITIES, on_fail="fix"))
+pii_only       = Guard().use(DetectPII(pii_entities=PII_ENTITIES, on_fail="fix", use_local=True))
 
 def evaluate_input(text: str) -> dict:
     out = input_guard.validate(text)

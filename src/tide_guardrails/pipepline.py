@@ -1,6 +1,6 @@
-from input_guard import evaluate_input, decide
-from output_guard import evaluate_output, handle, ERROR_MESSAGE  # match your real filename
-from chatbot import chatbot_reply
+from tide_guardrails.input_guard import evaluate_input, decide
+from tide_guardrails.output_guard import evaluate_output, handle, ERROR_MESSAGE  # match your real filename
+from tide_guardrails.chatbot import chatbot_reply
 
 from guardrails import Guard
 from guardrails.errors import ValidationError
@@ -8,7 +8,7 @@ from guardrails_ai.detect_jailbreak import DetectJailbreak
 from guardrails_ai.restricttotopic import RestrictToTopic
 from guardrails_ai.toxic_language import ToxicLanguage
 from guardrails_ai.detect_pii import DetectPII
-from dependencies import EXAMPLE_USER_QUERIES, pii_test_cases, ILLEGEAL_INPUT_REPLIES
+from tide_guardrails.dependencies import EXAMPLE_USER_QUERIES, pii_test_cases, ILLEGEAL_INPUT_REPLIES
 
 def process_message(user_message: str, num_reask: int = 3) -> str:
     input_eval = evaluate_input(user_message)

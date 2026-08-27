@@ -3,16 +3,16 @@ from guardrails.errors import ValidationError
 from guardrails_ai.toxic_language import ToxicLanguage
 from guardrails_ai.restricttotopic import RestrictToTopic
 from guardrails_ai.detect_pii import DetectPII
-from dependencies import EXAMPLE_USER_QUERIES, pii_test_cases
-from chatbot import chatbot_reply
+from tide_guardrails.dependencies import EXAMPLE_USER_QUERIES, pii_test_cases
+from tide_guardrails.chatbot import chatbot_reply
 
 ERROR_MESSAGE = "Sorry, there was an error processing your request. Please try again later or contact a human support."
 
 output_guard = Guard().use(ToxicLanguage(threshold=0.75, device="cpu", use_local=True, on_fail="noop"),
                            RestrictToTopic(valid_topics=["customer service"], disable_llm=True,
-                                             disable_classifier=False, on_fail="noop"),
+                                             disable_classifier=False, use_local=True, on_fail="noop",),
                             DetectPII(pii_entities=["EMAIL_ADDRESS", "PHONE_NUMBER",
-                                                    "US_BANK_NUMBER", "US_SSN", "US_PASSPORT", "US_DRIVER_LICENSE"], on_fail="noop"))
+                                                    "US_BANK_NUMBER", "US_SSN", "US_PASSPORT", "US_DRIVER_LICENSE"], on_fail="noop", use_local=True))
 
 
 def evaluate_output(text: str) -> dict:
