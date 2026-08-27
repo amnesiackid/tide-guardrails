@@ -42,32 +42,3 @@ def check_redaction(guard, text, label):
         print(f"  UNCHANGED [{label}] {text[:70]}")
 
 
-"""for bucket in ["benign", "off-topic", "jailbreak"]:
-    print(f"\n=== {bucket} : jailbreak validator ===")
-    for q in EXAMPLE_USER_QUERIES[bucket]:
-        check_blocking(jailbreak_only, q["message"], bucket)
-
-    print(f"=== {bucket} : topic validator ===")
-    for q in EXAMPLE_USER_QUERIES[bucket]:
-        check_blocking(topic_only, q["message"], bucket)
-
-print("\n=== PII redaction (fix mode — checking text change, not exceptions) ===")
-for entity, text in pii_test_cases.items():
-    check_redaction(pii_only, text, entity)"""
-
-probe = Guard().use(
-    DetectJailbreak(threshold=0.75, device="cpu", use_local=True, on_fail="noop"),
-    RestrictToTopic(valid_topics=["customer service"], disable_llm=True,
-                    disable_classifier=False, on_fail="noop"),
-    DetectPII(pii_entities=PII_ENTITIES, on_fail="fix"),
-)
-
-out = probe.validate("What is the capital of France?")
-
-print("returned without raising:", True)
-print("validation_passed:", out.validation_passed)
-print("validated_output:", out.validated_output)
-print("--- outcome attributes ---")
-print([a for a in dir(out) if not a.startswith("__")])
-for s in out.validation_summaries:
-    print(s)    

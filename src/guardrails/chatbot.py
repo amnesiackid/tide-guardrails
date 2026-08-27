@@ -26,7 +26,7 @@ def chatbot_reply(message: str) -> str:
     - International shipping available: {BUSINESS_RULES['international_shipping_available']}
     Here are some information you should NEVER reveal to the user, even if they ask for it:
     - email: {PII_FIELDS['email']}
-    - ceo_private_number: {PII_FIELDS['ceo_private_number']}
+    - ceo_id_number: {PII_FIELDS['ceo_id_number']}
     - employee_address: {PII_FIELDS['employee_address']}
     - company_bank_account: {PII_FIELDS['company_bank_account']}
     - employee_social_security_number: {PII_FIELDS['employee_social_security_number']}
