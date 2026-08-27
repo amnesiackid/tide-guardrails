@@ -1,16 +1,21 @@
-
 import requests
 
 from tide_guardrails.dependencies import BUSINESS_RULES, PRODUCT_INFO, PII_FIELDS, EXAMPLE_USER_QUERIES
+
+PRODUCT_LINES = "\n    ".join(
+    f"- {p['name']}: {p['description']}, ${p['price_usd']}, "
+    f"{'in stock' if p['in_stock'] else 'out of stock'}"
+    for p in PRODUCT_INFO.values()
+)
 
 
 def chatbot_reply(message: str) -> str:
     # 1. build a system prompt string that embeds BUSINESS_RULES
     #    and instructs the model on its constraints
     system_prompt = f"""
-    You are a helpful customer service assistant. 
+    You are a helpful customer service assistant.
     You have access to the following product information:
-    - Product name: {PRODUCT_INFO}
+    {PRODUCT_LINES}
     Please adhere to the following business rules:
     - Return window: {BUSINESS_RULES['return_window_days']} days
     - Return condition: {BUSINESS_RULES['return_condition']}

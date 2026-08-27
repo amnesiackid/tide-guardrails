@@ -1,7 +1,7 @@
 [project]
 name = "tide-guardrails"
 version = "0.1.0"
-description = "Add your description here"
+description = "Input/output guardrails around a deliberately unaligned local LLM, demoed as a customer-service chatbot"
 requires-python = ">=3.12"
 dependencies = [
     "guardrails-ai>=0.11.0",
