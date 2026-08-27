@@ -8,7 +8,7 @@ Accuracy = how often that expectation held.
 
 import os, logging, warnings
 
-# must be set before guardrails imports, or they have no effect
+
 os.environ["OTEL_SDK_DISABLED"] = "true"
 logging.getLogger("presidio-analyzer").setLevel(logging.ERROR)
 warnings.filterwarnings("ignore")

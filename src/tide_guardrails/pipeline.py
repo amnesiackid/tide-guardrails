@@ -8,15 +8,15 @@ from guardrails_ai.detect_jailbreak import DetectJailbreak
 from guardrails_ai.restricttotopic import RestrictToTopic
 from guardrails_ai.toxic_language import ToxicLanguage
 from guardrails_ai.detect_pii import DetectPII
-from tide_guardrails.dependencies import EXAMPLE_USER_QUERIES, pii_test_cases, ILLEGEAL_INPUT_REPLIES
+from tide_guardrails.dependencies import EXAMPLE_USER_QUERIES, pii_test_cases, ILLEGAL_INPUT_REPLIES
 
 def process_message(user_message: str, num_reask: int = 3) -> str:
     input_eval = evaluate_input(user_message)
     input_decision = decide(input_eval)
     category = input_decision["category"]
 
-    if category in ILLEGEAL_INPUT_REPLIES:  # "jailbreak" or "off-topic"
-        return ILLEGEAL_INPUT_REPLIES[category]   
+    if category in ILLEGAL_INPUT_REPLIES:  # "jailbreak" or "off-topic"
+        return ILLEGAL_INPUT_REPLIES[category]   
 
     safe_text = input_decision["text"]
     bot_answer = chatbot_reply(safe_text)

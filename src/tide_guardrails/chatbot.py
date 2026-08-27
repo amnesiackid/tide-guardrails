@@ -1,14 +1,17 @@
 
 import requests
 
-from tide_guardrails.dependencies import BUSINESS_RULES, PII_FIELDS, EXAMPLE_USER_QUERIES
+from tide_guardrails.dependencies import BUSINESS_RULES, PRODUCT_INFO, PII_FIELDS, EXAMPLE_USER_QUERIES
 
 
 def chatbot_reply(message: str) -> str:
     # 1. build a system prompt string that embeds BUSINESS_RULES
     #    and instructs the model on its constraints
     system_prompt = f"""
-    You are a helpful assistant. Please adhere to the following business rules:
+    You are a helpful customer service assistant. 
+    You have access to the following product information:
+    - Product name: {PRODUCT_INFO}
+    Please adhere to the following business rules:
     - Return window: {BUSINESS_RULES['return_window_days']} days
     - Return condition: {BUSINESS_RULES['return_condition']}
     - Refund processing time: {BUSINESS_RULES['refund_processing_days']} days
