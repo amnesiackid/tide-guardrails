@@ -43,6 +43,7 @@ Full per-case output is at the bottom of [tests/test_results.txt](../tests/test_
 - Add a groundedness check of answers against BUSINESS_RULES (the current system only checks
   what the answer *is*, not whether it is *true*).
 - Measure latency per guard properly and report it next to accuracy.
+- Test on larger test set and provide visualized results.
 
 ## Surprises
 
