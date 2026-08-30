@@ -22,7 +22,9 @@ For more introduction and examples, please read `examples/demo.ipynb`
 **Prerequisites**
 - Python 3.12+ (pinned in `.python-version`, `uv` will pick this up automatically)
 - [`uv`](https://docs.astral.sh/uv/getting-started/installation/) installed
-- [Ollama](https://ollama.com) installed and running, with the chatbot's model pulled:
+- [Ollama](https://ollama.com) installed and running, install it here:
+- `https://ollama.com/download` 
+- with the chatbot's model pulled:
 ```bash
   ollama pull huihui_ai/llama3.2-abliterate:3b
 ```
