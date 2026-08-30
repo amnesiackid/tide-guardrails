@@ -36,9 +36,9 @@ uv sync
 ```
 Some guards need post installation.
 ```bash
-python -m guardrails_ai.detect_jailbreak.post_install
-python -m guardrails_ai.detect_pii.post_install
-python -m guardrails_ai.toxic_language.post_install
+uv run python -m guardrails_ai.detect_jailbreak.post_install
+uv run python -m guardrails_ai.detect_pii.post_install
+uv run python -m guardrails_ai.toxic_language.post_install
 ```
 
 **First run will download model weights**
