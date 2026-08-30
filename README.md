@@ -76,7 +76,7 @@ uv run python src/tide_guardrails/pipeline.py
 ```bash
 uv run jupyter lab examples/demo.ipynb
 ```
-**Below is some example conversations**
+**Below are some example conversations**
 
 ```
 Use the guarded pipeline or the raw abliterate bot? [pipeline/raw]: raw
