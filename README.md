@@ -34,7 +34,7 @@ git clone https://github.com/amnesiackid/tide-guardrails
 cd tide-guardrails
 uv sync
 ```
-Some guards need post installation.
+**Some guards need post installation.**
 ```bash
 uv run python -m guardrails_ai.detect_jailbreak.post_install
 uv run python -m guardrails_ai.detect_pii.post_install
