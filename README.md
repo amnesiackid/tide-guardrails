@@ -108,7 +108,7 @@ tests/
   test_guard.py    # per-validator and compound-guard accuracy tests
   test_results.txt # recorded bot transcripts + guard test results
 examples/
-demo.ipynb     # story-telling style explanation notebook 
+  demo.ipynb     # story-telling style explanation notebook 
 DESIGN.md          # design thinking
 docs/evaluation.md # results, limitations, reflection
 ```
