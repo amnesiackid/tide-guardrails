@@ -20,7 +20,7 @@ my return request").
 ## Failure modes addressed
 
 1. **Prompt injection / jailbreaks** — "ignore previous instructions", policy-override attempts.
-2. **Topic drift** — the bot answering coding questions, telling jokes, giving weather reports.
+2. **Topic drift** — both directions: the user gives unrelated queries, or the bot answering coding questions, telling jokes, giving weather reports.
 3. **PII exposure** — both directions: the user pasting their own PII into the chat, and the bot
    leaking (or hallucinating) emails, phone numbers, SSNs, bank/passport/license numbers.
 4. **Toxic output** — insults or slurs in the bot's answer.
@@ -56,18 +56,11 @@ moderation APIs.
 - **PII on input is redacted (`on_fail="fix"`), not blocked.** Users legitimately paste their own
   data; dropping their message entirely would be hostile. The message proceeds redacted and the
   user is told. On output, any PII (leaked or hallucinated) fails the guard.
-- **Defense in depth over minimal checks.** Topic restriction runs on both sides: input-side to
-  refuse off-topic requests cheaply, output-side to catch drift the input guard let through. In
-  the results this redundancy is visible — output-side RestrictToTopic incidentally catches some
-  toxic and PII-bearing answers that their dedicated validator scores differently.
-- **Everything local.** Zero per-request cost and no data leaves the machine (relevant when the
-  guard's whole point is handling PII), traded against accuracy: local classifiers are noticeably
-  weaker than LLM judges, which the results show honestly (see docs/evaluation.md).
-- **Thresholds** (0.75 for jailbreak and toxicity) were chosen by trying the example sets; they
-  are a speed/false-positive compromise, not tuned on held-out data.
+
 
 ## How I know it's working
 
+The project is tested on laptops of some kindest friends of mine. Both Windows and macOS system are tested.
 `tests/test_guard.py` runs each validator alone against labeled cases (so misses and false alarms
 are attributable to one validator) and then the compound input/output guards end-to-end, printing
 per-case verdicts and accuracy. `tests/test_results.md` records the raw-bot baseline transcripts

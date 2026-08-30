@@ -12,8 +12,8 @@ PII_NOTICE = "We detected that your request may contain sensitive information. F
 # failing validator instead of raising on the first; PII uses "fix" to redact.
 input_guard = Guard().use(
     DetectJailbreak(threshold=0.75, device="cpu", use_local=True, on_fail="noop"),
-    RestrictToTopic(valid_topics=["customer service"], disable_llm=True, use_local=True,
-                    disable_classifier=False, on_fail="noop",),
+    RestrictToTopic(valid_topics=["customer service", "product information"], disable_llm=True, use_local=True,
+                    disable_classifier=False, on_fail="noop"),
     DetectPII(pii_entities=PII_ENTITIES, on_fail="fix", use_local=True),
 )
 

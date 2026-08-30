@@ -29,12 +29,12 @@ SINGLE = {
     "DetectJailbreak": Guard().use(
         DetectJailbreak(threshold=0.75, device="cpu", use_local=True, on_fail="noop")),
     "RestrictToTopic": Guard().use(
-        RestrictToTopic(valid_topics=["customer service"], disable_llm=True,
+        RestrictToTopic(valid_topics=["customer service", "product information"], disable_llm=True,
                         use_local=True, disable_classifier=False, on_fail="noop")),
     "DetectPII": Guard().use(
         DetectPII(pii_entities=PII_ENTITIES, use_local=True, on_fail="noop")),
     "ToxicLanguage": Guard().use(
-        ToxicLanguage(threshold=0.75, device="cpu", use_local=True, on_fail="noop")),
+        ToxicLanguage(threshold=0.1, device="cpu", use_local=True, on_fail="noop")),
 }
 
 # Input-side PII-exposure is left out: those messages ask for PII, they contain none,

@@ -14,8 +14,8 @@ REASK_INSTRUCTIONS = {
 }
 
 output_guard = Guard().use(
-    ToxicLanguage(threshold=0.75, device="cpu", use_local=True, on_fail="noop"),
-    RestrictToTopic(valid_topics=["customer service"], disable_llm=True,
+    ToxicLanguage(threshold=0.1, device="cpu", use_local=True, on_fail="noop",),
+    RestrictToTopic(valid_topics=["customer service", "product information"], disable_llm=True,
                     disable_classifier=False, use_local=True, on_fail="noop",),
     DetectPII(pii_entities=PII_ENTITIES, on_fail="noop", use_local=True),
 )

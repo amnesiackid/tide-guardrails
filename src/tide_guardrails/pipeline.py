@@ -1,7 +1,7 @@
 from tide_guardrails.input_guard import evaluate_input, decide, PII_NOTICE
 from tide_guardrails.output_guard import handle
 from tide_guardrails.chatbot import chatbot_reply
-from tide_guardrails.dependencies import EXAMPLE_USER_QUERIES, pii_test_cases, ILLEGAL_INPUT_REPLIES
+from tide_guardrails.dependencies import EXAMPLE_USER_QUERIES, ILLEGAL_INPUT_REPLIES
 
 
 def process_message(user_message: str, num_reask: int = 3) -> str:
@@ -18,11 +18,8 @@ def process_message(user_message: str, num_reask: int = 3) -> str:
 
 
 if __name__ == "__main__":
-    for bucket in ["benign", "off-topic", "jailbreak"]:
+    for bucket in ["benign", "off-topic", "jailbreak", "PII-exposure"]:
         print(f"\n=== {bucket} : pipeline ===")
         for q in EXAMPLE_USER_QUERIES[bucket]:
             print(f"User: {q['message']}")
             print(f"Chatbot: {process_message(q['message'])}\n")
-    for q in pii_test_cases.values():
-        print(f"User: {q}")
-        print(f"Chatbot: {process_message(q)}\n")

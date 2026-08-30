@@ -1,6 +1,3 @@
-import threading
-threading.stack_size(16 * 1024 * 1024)
-
 import os, logging, warnings
 
 
