@@ -1,10 +1,3 @@
-import os, logging, warnings
-
-
-os.environ["OTEL_SDK_DISABLED"] = "true"
-logging.getLogger("presidio-analyzer").setLevel(logging.ERROR)
-warnings.filterwarnings("ignore")
-
 from tide_guardrails.pipeline import process_message
 from tide_guardrails.chatbot import chatbot_reply
 

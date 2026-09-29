@@ -90,8 +90,8 @@ def test_compound(side, cases, evaluate, guard_for):
             correct = (not triggered) if owner is None else (owner in triggered)
             total += 1
             ok += correct
-            print(f"  {'ok   ' if correct else 'WRONG'} [{c['id']}] "
-                  f"({','.join(triggered) or '-'}) {c['message'][:40]}")
+            print(f"  {'CORRECT' if correct else 'WRONG'} [{c['id']}] "
+                  f"({','.join(triggered) or '-'}) {c['message']}")
     print(f"  {side}: {ok}/{total} = {ok / total:.2f}")
 
 
