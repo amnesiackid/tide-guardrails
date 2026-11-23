@@ -4,24 +4,29 @@ Add retrieval-augmented generation (RAG) to the guarded chatbot, learning RAG by
 This file is the anchor for the work on the `rag` branch: update the status table and the
 decision log as phases are finished.
 
-**Roles.** I write most of the code. Claude explains the concept before each phase, reviews my
-diffs (hints first, fixes only on request), and does the repetitive work: data, labeled test
-sets, batch runs, tables.
+**Roles (changed 2026-11-23, deadline 2026-11-30 11:30).** Claude implements each phase and
+explains the key concept and design choices as it goes. I review every diff, make the design
+decisions, run and read the results, and own the write-up. Phase 1 was mine; from Phase 2 on,
+Claude writes the code.
 
-**Each phase:** concept → I implement → review → measure → update this file.
+**Each phase:** short concept → Claude implements → I review and decide → measure → update this file.
 
 ## Status
 
-| Phase | Topic | Status |
-|---|---|---|
-| 0 | Knowledge base | ✅ done (`9269c83`) |
-| 1 | Chunking | ⬜ next |
-| 2 | Embeddings | ⬜ |
-| 3 | Retrieval + retrieval evaluation | ⬜ |
-| 4 | Generation (wire RAG into the pipeline) | ⬜ |
-| 5 | RAG × guardrails | ⬜ |
-| 6 | Evaluate and write up | ⬜ |
-| 7 | Optional: hybrid search, reranking, vector DB | ⬜ |
+| Phase | Topic | Target | Status |
+|---|---|---|---|
+| 0 | Knowledge base | — | ✅ done (`9269c83`) |
+| 1 | Chunking | Mon 23 Nov | 🔄 in progress |
+| 2 | Embeddings | Tue 24 Nov | ⬜ |
+| 3 | Retrieval + retrieval evaluation | Wed 25 Nov | ⬜ |
+| 4 | Generation (wire RAG into the pipeline) | Thu 26 Nov ⭐ must-hit | ⬜ |
+| 5 | RAG × guardrails | Fri 27 Nov | ⬜ |
+| 6 | Evaluate and write up | Sat 28 Nov | ⬜ |
+| — | Buffer, open PR `rag` → `main`, review | Sun 29 Nov | ⬜ |
+| — | Final fixes, merge | Mon 30 Nov, before 11:30 | ⬜ |
+| 7 | Optional: hybrid search, reranking, vector DB | only if buffer unused | ⬜ |
+
+If Phase 3 slips, shrink the labeled set to ~30 questions rather than delay Phase 4.
 
 ## Why RAG here
 
@@ -167,6 +172,7 @@ user message
 | 2026-09-29 | KB format: markdown + YAML frontmatter in `knowledge_base/` | Human-readable; metadata for filtering and evaluation |
 | 2026-09-29 | Start with a numpy index, no vector DB | Learn the mechanics first; the KB is small |
 | 2026-09-29 | Return window defined as 30 days of purchase | Matches the existing `nm-01` fixture |
+| 2026-11-23 | Claude implements from Phase 2 on; I review and decide | Deadline 2026-11-30 11:30 |
 
 ## Results
 
