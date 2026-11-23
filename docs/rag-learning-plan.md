@@ -16,8 +16,8 @@ Claude writes the code.
 | Phase | Topic | Target | Status |
 |---|---|---|---|
 | 0 | Knowledge base | — | ✅ done (`9269c83`) |
-| 1 | Chunking | Mon 23 Nov | 🔄 in progress |
-| 2 | Embeddings | Tue 24 Nov | ⬜ |
+| 1 | Chunking | Mon 23 Nov | ✅ done (`a4c141b`) |
+| 2 | Embeddings | Tue 24 Nov | ✅ done (pending review) |
 | 3 | Retrieval + retrieval evaluation | Wed 25 Nov | ⬜ |
 | 4 | Generation (wire RAG into the pipeline) | Thu 26 Nov ⭐ must-hit | ⬜ |
 | 5 | RAG × guardrails | Fri 27 Nov | ⬜ |
@@ -173,6 +173,10 @@ user message
 | 2026-09-29 | Start with a numpy index, no vector DB | Learn the mechanics first; the KB is small |
 | 2026-09-29 | Return window defined as 30 days of purchase | Matches the existing `nm-01` fixture |
 | 2026-11-23 | Claude implements from Phase 2 on; I review and decide | Deadline 2026-11-30 11:30 |
+| 2026-11-23 | Chunk IDs are `<doc_id>-<section number>` | Unique even if two sections share a heading |
+| 2026-11-23 | Index cache = one `.npz` per chunking strategy in `.rag_cache/` (gitignored), keyed by a SHA-256 over model, strategy and every chunk's id + text | Any KB edit triggers a rebuild; no stale vectors. Full rebuild is ~1 min, so no per-chunk incremental update |
+| 2026-11-23 | Vectors L2-normalized at embed time | Cosine similarity becomes a plain dot product in Phase 3 |
+| 2026-11-23 | Keep both product strategies (section / whole) indexed | Decide in Phase 3 by measuring, not guessing |
 
 ## Results
 

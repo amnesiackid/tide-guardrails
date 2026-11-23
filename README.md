@@ -29,6 +29,10 @@ For more introduction and examples, please read `examples/demo.ipynb`
   ollama pull huihui_ai/llama3.2-abliterate:3b
 ```
   (Only required for the full end-to-end demo — the guard tests run without it.)
+- for RAG (on the `rag` branch), the multilingual embedding model (about 1.2 GB):
+```bash
+  ollama pull bge-m3
+```
 
 **Install**
 ```bash
@@ -69,6 +73,14 @@ difference is easy to see.
 uv run python src/tide_guardrails/pipeline.py
 ```
 
+**Build the RAG index (requires Ollama with `bge-m3`):**
+```bash
+uv run python -m tide_guardrails.rag.embeddings
+```
+Embeds every knowledge-base chunk (about 1–2 minutes the first time) and caches the vectors in
+`.rag_cache/`. Later runs load the cache in well under a second and re-embed only when
+`knowledge_base/` changes.
+
 ## Example
 
 **You may read demo.ipynb for a story-telling style project explanation and see examples**
@@ -105,6 +117,10 @@ src/tide_guardrails/
   pipeline.py      # input guard -> chatbot -> output guard 
   dependencies.py  # business rules, product data, example queries / canned replies
   main.py          # interactive entry point (guarded vs raw mode)
+  rag/
+    chunking.py    # load knowledge_base/ markdown + frontmatter, split into chunks
+    embeddings.py  # bge-m3 embeddings via Ollama, cached index in .rag_cache/
+knowledge_base/    # products, policies and FAQ that RAG retrieves from
 tests/
   test_cases.py    # test cases
   test_guard.py    # per-validator and compound-guard accuracy tests
