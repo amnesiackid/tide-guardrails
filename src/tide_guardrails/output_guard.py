@@ -3,7 +3,7 @@ from guardrails_ai.toxic_language import ToxicLanguage
 from guardrails_ai.restricttotopic import RestrictToTopic
 from guardrails_ai.detect_pii import DetectPII
 from tide_guardrails.input_guard import PII_ENTITIES
-from tide_guardrails.chatbot import chatbot_reply
+from tide_guardrails.chatbot import chatbot_reply, NO_CONTEXT
 
 ERROR_MESSAGE = "Sorry, there was an error processing your request. Please try again later or contact a human support."
 
@@ -33,9 +33,13 @@ def evaluate_output(text: str) -> dict:
     }
 
 
-def handle(user_message: str, bot_answer: str, num_reask: int) -> str:
+def handle(user_message: str, bot_answer: str, num_reask: int, context: str = NO_CONTEXT) -> str:
     """Return bot_answer if it passes the output guard; otherwise re-ask the
-    model up to num_reask times with the failure reasons, then give up."""
+    model up to num_reask times with the failure reasons, then give up.
+
+    Every re-ask reuses the context retrieved for the original user message.
+    Retrieving again on the re-ask prompt would search with the bad answer and
+    the feedback text, and return the wrong chunks."""
     if not isinstance(num_reask, int) or num_reask < 1:
         raise ValueError(f"num_reask must be a positive integer, got {num_reask!r}")
     eval_result = evaluate_output(bot_answer)
@@ -47,7 +51,7 @@ def handle(user_message: str, bot_answer: str, num_reask: int) -> str:
                             if name in eval_result["triggered"])
         new_prompt = (f"For the user message: '{user_message}', you provided the "
                       f"following response: '{bot_answer}'. {feedback}")
-        bot_answer = chatbot_reply(new_prompt)
+        bot_answer = chatbot_reply(new_prompt, context)
         eval_result = evaluate_output(bot_answer)
         if not eval_result["triggered"]:
             return bot_answer

@@ -111,15 +111,16 @@ Bot: Your request was blocked because it appears to be an attack. Please follow 
 
 ```
 src/tide_guardrails/
-  chatbot.py       # raw bot: system prompt + Ollama call 
+  chatbot.py       # raw bot: behavior-rules prompt + retrieved context + Ollama call
   input_guard.py   # jailbreak / topic / PII guard on user input
   output_guard.py  # toxicity / topic / PII guard on bot output, with re-ask loop
-  pipeline.py      # input guard -> chatbot -> output guard 
+  pipeline.py      # input guard -> retrieve -> chatbot -> output guard (re-ask reuses context)
   dependencies.py  # business rules, product data, example queries / canned replies
   main.py          # interactive entry point (guarded vs raw mode)
   rag/
     chunking.py    # load knowledge_base/ markdown + frontmatter, split into chunks
     embeddings.py  # bge-m3 embeddings via Ollama, cached index in .rag_cache/
+    retrieval.py   # top-k cosine retrieval, k=5, no-answer threshold 0.50
 knowledge_base/    # products, policies and FAQ that RAG retrieves from
 tests/
   test_cases.py    # test cases
