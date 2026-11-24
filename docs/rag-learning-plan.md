@@ -17,8 +17,8 @@ Claude writes the code.
 |---|---|---|---|
 | 0 | Knowledge base | — | ✅ done (`9269c83`) |
 | 1 | Chunking | Mon 23 Nov | ✅ done (`a4c141b`) |
-| 2 | Embeddings | Tue 24 Nov | ✅ done (pending review) |
-| 3 | Retrieval + retrieval evaluation | Wed 25 Nov | ⬜ |
+| 2 | Embeddings | Tue 24 Nov | ✅ done (`360803d`) |
+| 3 | Retrieval + retrieval evaluation | Wed 25 Nov | ✅ done |
 | 4 | Generation (wire RAG into the pipeline) | Thu 26 Nov ⭐ must-hit | ⬜ |
 | 5 | RAG × guardrails | Fri 27 Nov | ⬜ |
 | 6 | Evaluate and write up | Sat 28 Nov | ⬜ |
@@ -177,10 +177,38 @@ user message
 | 2026-11-23 | Index cache = one `.npz` per chunking strategy in `.rag_cache/` (gitignored), keyed by a SHA-256 over model, strategy and every chunk's id + text | Any KB edit triggers a rebuild; no stale vectors. Full rebuild is ~1 min, so no per-chunk incremental update |
 | 2026-11-23 | Vectors L2-normalized at embed time | Cosine similarity becomes a plain dot product in Phase 3 |
 | 2026-11-23 | Keep both product strategies (section / whole) indexed | Decide in Phase 3 by measuring, not guessing |
+| 2026-11-24 | Products chunked by section | Ties with whole on hit@k (1 question apart), but keeps every answerable top-1 score above every no-answer one, so a threshold works; whole drops "IPX5" to 0.461 |
+| 2026-11-24 | Retrieve k=5 | k=3 misses 3 "problem with product X" questions whose policy ranks 4th; 5 short section chunks are ~200 words of context |
+| 2026-11-24 | No-answer threshold: top-1 score < 0.50 | Separates all 8 no-answer from all 67 answerable questions; 0.50 sits in the 0.49–0.55 gap but only 8 negatives back it, so revisit in Phase 5 |
 
 ## Results
 
-_Filled in from Phase 3 on._
+### Phase 3 — retrieval (2026-11-24)
+
+75 labeled questions in `tests/rag_questions.py` (67 answerable, 8 with no answer in the KB);
+run `uv run python tests/eval_retrieval.py`, full output in `tests/retrieval_results.txt`.
+A hit means a chunk from any expected doc is in the top k.
+
+| Products chunked | Chunks | hit@1 | hit@3 | hit@5 | MRR |
+|---|---|---|---|---|---|
+| by section | 199 | 93% | 96% | 99% | 0.947 |
+| whole file | 125 | 94% | 96% | 100% | 0.956 |
+
+- **Cross-lingual works:** all 12 German and Chinese questions hit@1 under both strategies.
+- **Near-duplicates mostly fine:** 9/9 by hit@3. The one section-strategy top-1 miss (p-10,
+  gift box allergens) went to the holiday basket, which contains the gift box and lists the same
+  allergens.
+- **Main failure pattern — product vs. policy:** "My mug arrived broken", "The chocolates arrived
+  melted", "My earbuds stopped charging after four months" retrieve the product's chunks first;
+  the damaged-items or warranty policy comes 4th–10th. The product chunks do point to that
+  policy, so the model still gets a hint, but this is the case for a reranker (Phase 7).
+- **Keyword overlap:** "What is your company's bank account number?" retrieves *Managing Your
+  Account* (the word "account") before the privacy policy (rank 4).
+- **Exact terms are weakest:** "IPX5" and "UV400" hit, but with the lowest answerable scores
+  (0.46–0.55). This is what hybrid BM25 search would fix (Phase 7).
+- **No-answer detection:** with section chunks every no-answer top-1 score (0.35–0.49) is below
+  every answerable one (0.55–0.83), so a 0.50 threshold separates all 75. Off-topic questions
+  still return a "least bad" chunk (weather → rain jacket, laptops → backpack) without it.
 
 ## Workflow reminders
 
