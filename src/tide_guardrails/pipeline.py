@@ -14,7 +14,7 @@ PHASE5 = frozenset({"chunk_guard", "topic_override", "grounding"})
 DEFAULT_DEFENSES = PHASE5
 
 # A message RestrictToTopic flagged as off-topic proceeds if its top-1 retrieval
-# score reaches this. Measured: true off-topic messages top out at 0.465, the 21
+# score reaches this. Measured: true off-topic messages top out at 0.465, the 22
 # answerable questions the classifier wrongly flagged start at 0.550 (see the
 # Phase 5 results in docs/rag-learning-plan.md). Never applied to jailbreaks:
 # real jailbreaks score 0.51-0.59 because they mention returns and products.

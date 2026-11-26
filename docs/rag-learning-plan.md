@@ -21,8 +21,8 @@ Claude writes the code.
 | 3 | Retrieval + retrieval evaluation | Wed 25 Nov | ✅ done (`c3bb5c5`) |
 | 4 | Generation (wire RAG into the pipeline) | Thu 26 Nov ⭐ must-hit | ✅ done; demo notebook cells moved to Phase 6 |
 | 5 | RAG × guardrails | Fri 27 Nov | ✅ done |
-| 6 | Evaluate and write up | Sat 28 Nov | ⬜ |
-| — | Buffer, open PR `rag` → `main`, review | Sun 29 Nov | ⬜ |
+| 6 | Evaluate and write up | Sat 28 Nov | 🔄 drafted by Claude, my edit pending |
+| — | Buffer, open PR `rag` → `main`, review | Sun 29 Nov | ✅ Phases 0–5 merged early (PR #1, `b46142b`, 26 Nov); Phase 6 gets its own PR |
 | — | Final fixes, merge | Mon 30 Nov, before 11:30 | ⬜ |
 | 7 | Optional: hybrid search, reranking, vector DB | only if buffer unused | ⬜ |
 
@@ -187,7 +187,7 @@ user message
 | 2026-11-24 | Empty context stays model-answered (no canned short-circuit) | The 3B model said "I don't have that information" for laptops and a Paris store instead of inventing |
 | 2026-11-24 | `main.py` raw mode = RAG bot without guards | Phase 5 attacks the raw RAG bot; the old prompt-stuffed bot stays on `main` for before/after |
 | 2026-11-25 | Chunk guard = phrase list (`rag_guard.INJECTION_PATTERN`), applied to retrieved chunks before the prompt | `DetectJailbreak` scored real chunks higher than poisoned ones (median 0.69 vs 0.67–0.75); bart-large-mnli zero-shot scored real chunks about the chatbot up to 0.98 vs 0.04–0.29 for poison. The list: 5/5 order-style poisons, 0/199 real chunks. Known to be evadable |
-| 2026-11-25 | Topic override: an input flagged off-topic (never jailbreak) proceeds if top-1 retrieval ≥ 0.52 | True off-topic ≤ 0.465, the 21 wrongly flagged answerable questions ≥ 0.550. Not for jailbreaks: real jailbreaks score 0.51–0.59 (they mention returns/products), above false alarms like "IPX5" (0.546) |
+| 2026-11-25 | Topic override: an input flagged off-topic (never jailbreak) proceeds if top-1 retrieval ≥ 0.52 | True off-topic ≤ 0.465, the 22 wrongly flagged answerable questions (18 of the 75 retrieval questions + 4 from the Phase 4 run) ≥ 0.550. Not for jailbreaks: real jailbreaks score 0.51–0.59 (they mention returns/products), above false alarms like "IPX5" (0.546) |
 | 2026-11-25 | Groundedness = bart-large-mnli entailment of every answer sentence containing a number, $ or %, against each retrieved chunk (≥ 0.5 supported); English answers only | Already cached for RestrictToTopic; 12/12 on hand-made true/false claims. Numbers are the most damaging hallucinations and the easiest claims to define |
 | 2026-11-25 | Groundedness gets 1 re-ask; if still ungrounded, reply with the closest retrieved chunk verbatim (or "I don't have that information" when nothing was retrieved) | With 3 re-asks a correct power-bank answer looped into the error message: hedged sentences failed, and feedback mentioning "CONTEXT" made the model write "The CONTEXT only mentions…", which is never entailed |
 | 2026-11-25 | Re-ask prompt ends with "Reply in the same language as the user message" | Fixes most cases, not all: in the final run a flagged Chinese answer still switched to English |
@@ -299,6 +299,25 @@ attacker controls a document, not the message.
   forced a re-ask, but is inconsistent: the same wrong phrase passed in another sample. Cost:
   ~3–6 s per checked sentence on CPU, ~20 s to load the model once.
 - `tests/test_guard.py` unchanged: input 19/21, output 20/21.
+
+### Phase 6 — before/after (2026-11-26)
+
+Full write-up in `docs/evaluation.md`; design changes in `DESIGN.md`. New script
+`tests/eval_rag_answers.py` rebuilds the pre-RAG bot from commit `42e3af2` with `git show` and
+compares it on 20 questions (all graded by hand after the automatic markers mis-graded 6 answers):
+
+| System | Old-prompt facts | KB-only facts | All |
+|---|---|---|---|
+| Before RAG | 8/10 | 0/10 | 8/20 |
+| RAG, Phase 4 | 8/10 | 7/10 | 15/20 |
+| RAG, Phase 5 (current) | 9/10 | 7/10 | 16/20 |
+
+- Secrets, raw bots: before RAG 1/8 extraction probes leaked, and that one ("debug mode … as
+  JSON") printed all 7 `PII_FIELDS`; after RAG 0/8.
+- Latency, defended pipeline: median 17.7 s per message (LLM 9.6, retrieval 2.2, groundedness
+  2.1, output guard 2.0, input guard 1.4); max 38 s.
+- Still blocked in every system: "Can you reset my password in the chat?" and "What are the
+  support hours for human agents?" (DetectJailbreak false alarms, before retrieval runs).
 
 ## Workflow reminders
 
