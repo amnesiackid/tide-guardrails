@@ -29,7 +29,7 @@ For more introduction and examples, please read `examples/demo.ipynb`
   ollama pull huihui_ai/llama3.2-abliterate:3b
 ```
   (Only required for the full end-to-end demo — the guard tests run without it.)
-- for RAG (on the `rag` branch), the multilingual embedding model (about 1.2 GB):
+- and the multilingual embedding model used for retrieval (about 1.2 GB):
 ```bash
   ollama pull bge-m3
 ```
