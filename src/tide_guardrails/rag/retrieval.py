@@ -18,9 +18,24 @@ DEFAULT_K = 5          # k=3 misses "problem with product X" questions whose pol
 MIN_SCORE = 0.50       # top-1 below this: treat as "the KB has no answer" (see tests/retrieval_results.txt)
 
 
+_override: Index | None = None
+
+
+def set_index_override(index: Index | None) -> None:
+    """Make every retrieval use `index` (None restores the normal KB index).
+    Used by tests/eval_rag_attacks.py to add poisoned documents without
+    touching knowledge_base/ or the cache."""
+    global _override
+    _override = index
+
+
 @lru_cache(maxsize=2)
-def get_index(product_strategy: str = DEFAULT_STRATEGY) -> Index:
+def _load_index(product_strategy: str) -> Index:
     return load_or_build_index(product_strategy, verbose=False)
+
+
+def get_index(product_strategy: str = DEFAULT_STRATEGY) -> Index:
+    return _override if _override is not None else _load_index(product_strategy)
 
 
 def rank(scores: np.ndarray, index: Index, k: int) -> list[tuple[Chunk, float]]:

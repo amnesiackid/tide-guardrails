@@ -117,6 +117,7 @@ src/tide_guardrails/
   pipeline.py      # input guard -> retrieve -> chatbot -> output guard (re-ask reuses context)
   dependencies.py  # business rules, product data, example queries / canned replies
   main.py          # interactive entry point (guarded vs raw mode)
+  rag_guard.py     # RAG-specific guards: chunk screen (injections), groundedness check
   rag/
     chunking.py    # load knowledge_base/ markdown + frontmatter, split into chunks
     embeddings.py  # bge-m3 embeddings via Ollama, cached index in .rag_cache/
@@ -125,6 +126,9 @@ knowledge_base/    # products, policies and FAQ that RAG retrieves from
 tests/
   test_cases.py    # test cases
   test_guard.py    # per-validator and compound-guard accuracy tests
+  rag_questions.py / eval_retrieval.py      # retrieval evaluation (hit@k, MRR)
+  rag_attack_cases.py / eval_rag_attacks.py # poisoned-document attacks + benign regression
+  poisoned_kb/     # attack documents, never part of knowledge_base/
   test_results.txt # recorded bot transcripts + guard test results
 examples/
   demo.ipynb     # story-telling style explanation notebook 

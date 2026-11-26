@@ -6,7 +6,7 @@ def main(message: str, use_guards=True, num_reask=3, debug=False):
         response = process_message(message, num_reask=num_reask, debug=debug)
     else:
         # Raw RAG bot: same retrieval and prompt, but no input or output guard.
-        response = chatbot_reply(message, retrieve_context(message, debug))
+        response = chatbot_reply(message, retrieve_context(message, debug, defenses=frozenset()))
     return response
 
 def choose_mode() -> bool:
