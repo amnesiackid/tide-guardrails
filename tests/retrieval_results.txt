@@ -1,0 +1,96 @@
+75 questions (67 answerable, 8 no-answer)
+
+========================================================================
+Strategy: section
+========================================================================
+group              n   hit@1  hit@3  hit@5  MRR
+ALL answerable    67     93%    96%    99%  0.947
+  product         13    100%   100%   100%  1.000
+  near-dup         9     89%   100%   100%  0.944
+  exact-term       3    100%   100%   100%  1.000
+  policy          30     87%    90%    97%  0.898
+  cross-lingual   12    100%   100%   100%  1.000
+  lang=de          6    100%   100%   100%  1.000
+  lang=en         55     91%    95%    98%  0.935
+  lang=zh          6    100%   100%   100%  1.000
+
+Misses at k=3 (expected doc not in the top 3):
+  q-07 [policy] My mug arrived broken
+       expected ['pol-damaged'], first hit at rank 4
+       0.586 prod-024-3                   Ceramic Dinner Plate Set > Shipping
+       0.575 prod-021-1                   Insulated Travel Mug > Overview
+       0.565 prod-031-3                   Tea Sampler > Returns
+  q-08 [policy] The chocolates arrived melted
+       expected ['pol-damaged'], first hit at rank 10
+       0.561 prod-004-2                   Chocolate Gift Box > Details
+       0.560 prod-004-1                   Chocolate Gift Box > Overview
+       0.553 prod-004-3                   Chocolate Gift Box > Returns
+  q-27 [policy] What is your company's bank account number?
+       expected ['pol-privacy'], first hit at rank 4
+       0.550 pol-account-management-2     Managing Your Account > Creating an account
+       0.531 pol-account-management-5     Managing Your Account > Deleting your account
+       0.530 pol-account-management-3     Managing Your Account > Updating your details
+
+Top-1 score, answerable vs no-answer:
+  answerable  min 0.546  median 0.684  max 0.828
+  no-answer   min 0.351  median 0.436  max 0.492
+    n-01 0.406 What's the weather in Berlin tomorrow?   -> Sport Earbuds > Details
+    n-02 0.492 Do you sell laptops?                     -> Everyday Backpack > Overview
+    n-03 0.448 Do you have a physical store in Paris?   -> French Press > Overview
+    n-04 0.362 Write me a poem about the ocean          -> Portable Bluetooth Speaker > Overview
+    n-05 0.436 Do you sell dog food?                    -> Return Policy > Items that cannot be returned
+    n-06 0.351 Can you recommend a good movie?          -> Return Policy > Items that cannot be returned
+    n-07 0.423 Wie wird das Wetter heute?               -> Packable Rain Jacket > Details
+    n-08 0.444 你们卖电视吗？                                  -> Frequently Asked Questions > Do you have student discounts?
+  best threshold 0.54: 75/75 classified correctly (0 answerable wrongly rejected, 0 no-answer let through)
+
+========================================================================
+Strategy: whole
+========================================================================
+group              n   hit@1  hit@3  hit@5  MRR
+ALL answerable    67     94%    96%   100%  0.956
+  product         13    100%   100%   100%  1.000
+  near-dup         9    100%   100%   100%  1.000
+  exact-term       3    100%   100%   100%  1.000
+  policy          30     87%    90%   100%  0.901
+  cross-lingual   12    100%   100%   100%  1.000
+  lang=de          6    100%   100%   100%  1.000
+  lang=en         55     93%    95%   100%  0.946
+  lang=zh          6    100%   100%   100%  1.000
+
+Misses at k=3 (expected doc not in the top 3):
+  q-08 [policy] The chocolates arrived melted
+       expected ['pol-damaged'], first hit at rank 5
+       0.597 prod-004-1                   Chocolate Gift Box > Full Document
+       0.547 prod-034-1                   Holiday Gift Basket > Full Document
+       0.526 prod-029-1                   Dark Chocolate Bars (4-pack) > Full Document
+  q-09 [policy] My earbuds stopped charging after four months
+       expected ['pol-warranty', 'pol-damaged'], first hit at rank 4
+       0.615 prod-002-1                   Wireless Earbuds > Full Document
+       0.565 prod-013-1                   Sport Earbuds > Full Document
+       0.560 prod-014-1                   Over-ear Headphones > Full Document
+  q-27 [policy] What is your company's bank account number?
+       expected ['pol-privacy'], first hit at rank 4
+       0.550 pol-account-management-2     Managing Your Account > Creating an account
+       0.531 pol-account-management-5     Managing Your Account > Deleting your account
+       0.530 pol-account-management-3     Managing Your Account > Updating your details
+
+Top-1 score, answerable vs no-answer:
+  answerable  min 0.461  median 0.687  max 0.828
+  no-answer   min 0.352  median 0.437  max 0.484
+    n-01 0.377 What's the weather in Berlin tomorrow?   -> Portable Bluetooth Speaker > Full Document
+    n-02 0.484 Do you sell laptops?                     -> Everyday Backpack > Full Document
+    n-03 0.459 Do you have a physical store in Paris?   -> French Press > Full Document
+    n-04 0.352 Write me a poem about the ocean          -> International Shipping > Overview
+    n-05 0.437 Do you sell dog food?                    -> Dark Chocolate Bars (4-pack) > Full Document
+    n-06 0.352 Can you recommend a good movie?          -> Knit Throw Blanket > Full Document
+    n-07 0.415 Wie wird das Wetter heute?               -> Packable Rain Jacket > Full Document
+    n-08 0.444 你们卖电视吗？                                  -> Frequently Asked Questions > Do you have student discounts?
+  best threshold 0.53: 74/75 classified correctly (1 answerable wrongly rejected, 0 no-answer let through)
+
+========================================================================
+Summary (answerable questions)
+========================================================================
+strategy           n   hit@1  hit@3  hit@5  MRR
+section           67     93%    96%    99%  0.947
+whole             67     94%    96%   100%  0.956

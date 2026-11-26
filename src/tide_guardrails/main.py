@@ -1,18 +1,12 @@
-import os, logging, warnings
-
-
-os.environ["OTEL_SDK_DISABLED"] = "true"
-logging.getLogger("presidio-analyzer").setLevel(logging.ERROR)
-warnings.filterwarnings("ignore")
-
-from tide_guardrails.pipeline import process_message
+from tide_guardrails.pipeline import process_message, retrieve_context
 from tide_guardrails.chatbot import chatbot_reply
 
-def main(message: str, use_guards=True, num_reask=3):
+def main(message: str, use_guards=True, num_reask=3, debug=False):
     if use_guards is True:
-        response = process_message(message, num_reask=num_reask)
+        response = process_message(message, num_reask=num_reask, debug=debug)
     else:
-        response = chatbot_reply(message)
+        # Raw RAG bot: same retrieval and prompt, but no input or output guard.
+        response = chatbot_reply(message, retrieve_context(message, debug, defenses=frozenset()))
     return response
 
 def choose_mode() -> bool:
@@ -28,7 +22,7 @@ def choose_mode() -> bool:
 def run():
     print("=== Chatbot ===")
     use_guards = choose_mode()
-    label = "guarded pipeline" if use_guards else "raw abliterate bot (no guards)"
+    label = "guarded pipeline" if use_guards else "raw abliterate RAG bot (no guards)"
     print(f"Mode: {label}. Type 'quit' to exit.\n")
 
     while True:
